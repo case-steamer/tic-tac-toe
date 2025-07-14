@@ -54,18 +54,23 @@ canvas.grid(row=0, column=0, sticky='nsew')
 
 def button_click(button):
     print(button)
-    X = draw_X
+    X = draw_X.convert('RGBA')
     O = O_img
+    img = Image.new('RGBA', cell_img.size)
     img_to_merge = cell_img
+    img.paste(cell_img.convert('RGBA'), (0,0))
     x_loc = [b[1][0] for b in buttons if b[0] == button] #button[1][0]
     y_loc = [b[1][1] for b in buttons if b[0] == button] #button[1][1]
-    x_floor = x_loc[0] // 2
-    y_floor = y_loc[0] //2
+    xc = x_loc[0]
+    yc = y_loc[0]
+    x_floor = (x_loc[0] // 2)
+    y_floor = (y_loc[0] // 2)
     # draw_label = Label(root, image=X, highlightthickness=0, bd=0)
-    img_to_merge.paste(X, (x_floor, y_floor), X)
-    display_img = ImageTk.PhotoImage(img_to_merge)
-    display_lbl = Label(root, image=display_img, highlightthickness=0)
-    display_lbl.grid(row=x_loc[0], column=y_loc[0], columnspan=1, rowspan=1, sticky='nsew')
+    img.paste(X, (x_floor, y_floor), X)
+    display_img = ImageTk.PhotoImage(img)
+    display_lbl = Label(root, width=200, height=200, image=display_img, highlightthickness=0)
+    display_lbl.image = display_img
+    canvas.create_window(xc, yc, window=display_lbl, width=200, height=200, anchor='center')
 
 
 def generate_button(x, y):
