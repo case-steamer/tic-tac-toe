@@ -6,15 +6,15 @@ from PIL import Image, ImageTk
 
 # game board spaces
 game_spaces = [
-    (1, 0),
-    (1, 1),
-    (1, 2),
-    (2, 0),
-    (2, 1),
-    (2, 2),
-    (3, 0),
-    (3, 1),
-    (3, 2)
+    (100, 300),
+    (100, 500),
+    (100, 700),
+    (300, 300),
+    (300, 500),
+    (300, 700),
+    (500, 300),
+    (500, 500),
+    (500, 700)
     ]
 buttons = []
 
@@ -35,7 +35,9 @@ buttons = []
 # initialize game board and window
 root = Tk()
 root.title("Tic-Tac-Toe")
-
+root.geometry("600x800")
+root.grid_rowconfigure(0, weight=1)
+root.grid_columnconfigure(0, weight=1)
 
 header_img = Image.open('images/header.jpg')
 header = ImageTk.PhotoImage(header_img)
@@ -46,28 +48,38 @@ X_img = ImageTk.PhotoImage(draw_X)
 draw_O = Image.open('images/O.png')
 O_img = ImageTk.PhotoImage(draw_O)
 
+canvas = Canvas(root, width=header.width(), height=(header.height() * 4))
+canvas.grid(row=0, column=0, sticky='nsew')
+
 
 def button_click(button):
     print(button)
-    X = X_img
+    X = draw_X
     O = O_img
+    img_to_merge = cell_img
     x_loc = [b[1][0] for b in buttons if b[0] == button] #button[1][0]
     y_loc = [b[1][1] for b in buttons if b[0] == button] #button[1][1]
-    label = Label(root, image=X, highlightthickness=0, bd=0)
-    label.grid(row=x_loc, column=y_loc, columnspan=1, rowspan=1, sticky='nsew')
+    x_floor = x_loc[0] // 2
+    y_floor = y_loc[0] //2
+    # draw_label = Label(root, image=X, highlightthickness=0, bd=0)
+    img_to_merge.paste(X, (x_floor, y_floor), X)
+    display_img = ImageTk.PhotoImage(img_to_merge)
+    display_lbl = Label(root, image=display_img, highlightthickness=0)
+    display_lbl.grid(row=x_loc[0], column=y_loc[0], columnspan=1, rowspan=1, sticky='nsew')
 
 
 def generate_button(x, y):
     cell_button = Button(root, image=cell, highlightthickness=0, bd=0, command=lambda: button_click(button=cell_button))
-    cell_button.grid(row=row, column=column, columnspan=1, rowspan=1, sticky='nsew')
-    buttons.append((cell_button, tup))
+    # cell_button.grid(row=row, column=column, columnspan=1, rowspan=1, sticky='nsew')
+    canvas.create_window(x, y, window=cell_button, width=200, height=200, anchor='center')
+    # canvas.create_window(x, y, window=cell_button, width=200, height=400, anchor='center')
+    buttons.append((cell_button, (x, y)))
+    print(x,y)
 
 
 
-board_label = Label(root, image=header, highlightthickness=0)
+canvas.create_image(0,0, image=header, anchor='nw')
 
-
-board_label.grid(row=0, column=0, columnspan=3, rowspan=1, sticky='nsew')
 
 for tup in game_spaces:
     for x, y in [tup]:
@@ -81,4 +93,5 @@ for tup in game_spaces:
 
 
 if __name__ == "__main__":
+    # canvas.grid(row=0, column=0)
     root.mainloop()
