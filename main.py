@@ -1,5 +1,6 @@
 from tkinter import *
 from PIL import Image, ImageTk
+import time
 
 
 
@@ -20,8 +21,14 @@ buttons = []
 
 
 
+class Player:
+    pass
 
+player_1 = Player()
+player_2 = Player()
 
+players = [player_1, player_2]
+current_player: Player
 
 
 
@@ -53,19 +60,22 @@ canvas.grid(row=0, column=0, sticky='nsew')
 
 
 def button_click(button):
-    print(button)
-    X = draw_X
-    O = O_img
+    global current_player
+    if current_player == player_1:
+        tok = draw_X
+    elif current_player == player_2:
+        tok = draw_O
     img_to_merge = Image.new('RGBA', cell_img.size)
     converted_cell = cell_img.convert('RGBA')
     img_to_merge.paste(converted_cell, (0, 0))
     x_loc = [b[1][0] for b in buttons if b[0] == button] #button[1][0]
     y_loc = [b[1][1] for b in buttons if b[0] == button] #button[1][1]
-    img_to_merge.paste(X, (0, 0), X)
+    img_to_merge.paste(tok, (0, 0), tok)
     display_img = ImageTk.PhotoImage(img_to_merge)
     display_lbl = Label(root, image=display_img, highlightthickness=0)
     display_lbl.image = display_img
     canvas.create_window(x_loc[0], y_loc[0], window=display_lbl, width=200, height=200, anchor='center')
+    buttons.remove(button)
 
 def generate_button(x, y):
     cell_button = Button(root, image=cell, highlightthickness=0, bd=0, command=lambda: button_click(button=cell_button))
@@ -73,7 +83,22 @@ def generate_button(x, y):
     canvas.create_window(x, y, window=cell_button, width=200, height=200, anchor='center')
     # canvas.create_window(x, y, window=cell_button, width=200, height=400, anchor='center')
     buttons.append((cell_button, (x, y)))
-    print(x,y)
+
+
+def measure():
+    return len(buttons)
+
+def take_turn(player):
+    global current_player
+    current_player = player
+    is_turn = True
+    while is_turn:
+        old = measure()
+        time.sleep(.5)
+        new = measure()
+        if old != new:
+            is_turn = False
+
 
 
 
@@ -91,6 +116,7 @@ for tup in game_spaces:
 
 
 
-if __name__ == "__main__":
-    # canvas.grid(row=0, column=0)
-    root.mainloop()
+root.mainloop()
+while len(buttons) > 0:
+    for player in players:
+        take_turn(player)
