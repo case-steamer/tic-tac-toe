@@ -1,6 +1,7 @@
 from tkinter import *
 from PIL import Image, ImageTk
 import time
+from player import Player
 
 
 
@@ -21,11 +22,12 @@ buttons = []
 
 
 
-class Player:
-    pass
 
 player_1 = Player()
 player_2 = Player()
+
+player_1.name = 'X'
+player_2.name = 'O'
 
 players = [player_1, player_2]
 current_player: Player
@@ -59,8 +61,17 @@ canvas = Canvas(root, width=header.width(), height=(header.height() * 4))
 canvas.grid(row=0, column=0, sticky='nsew')
 
 
-def button_click(button):
-    global current_player
+def find_current(func):
+    def wrapper(*args, **kwargs):
+        global current_player
+        result = func(*args, **kwargs)
+        current_player = current_player
+        return result
+    return wrapper
+
+
+@find_current
+def button_click(button, current_player):
     if current_player == player_1:
         tok = draw_X
     elif current_player == player_2:
@@ -79,9 +90,7 @@ def button_click(button):
 
 def generate_button(x, y):
     cell_button = Button(root, image=cell, highlightthickness=0, bd=0, command=lambda: button_click(button=cell_button))
-    # cell_button.grid(row=row, column=column, columnspan=1, rowspan=1, sticky='nsew')
     canvas.create_window(x, y, window=cell_button, width=200, height=200, anchor='center')
-    # canvas.create_window(x, y, window=cell_button, width=200, height=400, anchor='center')
     buttons.append((cell_button, (x, y)))
 
 
@@ -89,7 +98,6 @@ def measure():
     return len(buttons)
 
 def take_turn(player):
-    global current_player
     current_player = player
     is_turn = True
     while is_turn:
@@ -98,7 +106,6 @@ def take_turn(player):
         new = measure()
         if old != new:
             is_turn = False
-
 
 
 
