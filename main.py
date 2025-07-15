@@ -56,17 +56,19 @@ def button_click(button):
     print(button)
     X = draw_X
     O = O_img
-    img_to_merge = cell_img
+    img_to_merge = Image.new('RGBA', cell_img.size)
+    img_to_merge.paste(cell_img.convert('RGBA'), (0, 0))
     x_loc = [b[1][0] for b in buttons if b[0] == button] #button[1][0]
     y_loc = [b[1][1] for b in buttons if b[0] == button] #button[1][1]
     x_floor = x_loc[0] // 2
-    y_floor = y_loc[0] //2
+    y_floor = y_loc[0] // 2
     # draw_label = Label(root, image=X, highlightthickness=0, bd=0)
     img_to_merge.paste(X, (x_floor, y_floor), X)
     display_img = ImageTk.PhotoImage(img_to_merge)
     display_lbl = Label(root, image=display_img, highlightthickness=0)
-    display_lbl.grid(row=x_loc[0], column=y_loc[0], columnspan=1, rowspan=1, sticky='nsew')
-
+    display_lbl.image = display_img
+    # display_lbl.grid(row=x_loc[0], column=y_loc[0], columnspan=1, rowspan=1, sticky='nsew')
+    canvas.create_window(x_loc[0], y_loc[0], window=display_lbl, width=200, height=200, anchor='center')
 
 def generate_button(x, y):
     cell_button = Button(root, image=cell, highlightthickness=0, bd=0, command=lambda: button_click(button=cell_button))
