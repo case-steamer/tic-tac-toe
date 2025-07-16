@@ -59,12 +59,14 @@ def button_click(button):
     img_to_merge.paste(converted_cell, (0, 0))
     x_loc = [b[1][0] for b in buttons if b[0] == button] #button[1][0]
     y_loc = [b[1][1] for b in buttons if b[0] == button] #button[1][1]
-    img_to_merge.paste(tok, (0, 0), tok)
+    img_to_merge.paste(draw_X, (0, 0), draw_X)
     display_img = ImageTk.PhotoImage(img_to_merge)
     display_lbl = Label(root, image=display_img, highlightthickness=0)
     display_lbl.image = display_img
     canvas.create_window(x_loc[0], y_loc[0], window=display_lbl, width=200, height=200, anchor='center')
-    buttons.remove(button)
+    buttons_to_remove = next((b for b in buttons if b[0] == button), None)
+    if buttons_to_remove is not None:
+        buttons.remove(buttons_to_remove)
 
 def generate_button(x, y):
     cell_button = Button(root, image=cell, highlightthickness=0, bd=0, command=lambda: button_click(button=cell_button))
