@@ -28,10 +28,8 @@ class Player:
 player_1 = Player()
 player_2 = Player()
 
-player_1.name = 'X'
-player_2.name = 'O'
-
 players = [player_1, player_2]
+current_player: Player
 
 
 
@@ -57,8 +55,6 @@ draw_X = Image.open('images/X.png')
 X_img = ImageTk.PhotoImage(draw_X)
 draw_O = Image.open('images/O.png')
 O_img = ImageTk.PhotoImage(draw_O)
-player_1.avatar = draw_X
-player_2.avatar = draw_O
 
 canvas = Canvas(root, width=header.width(), height=(header.height() * 4))
 canvas.grid(row=0, column=0, sticky='nsew')
@@ -95,7 +91,9 @@ def generate_button(x, y):
 def measure():
     return len(buttons)
 
-def take_turn():
+def take_turn(player):
+    global current_player
+    current_player = player
     is_turn = True
     while is_turn:
         old = measure()
@@ -121,3 +119,6 @@ for tup in game_spaces:
 
 
 root.mainloop()
+while len(buttons) > 0:
+    for player in players:
+        take_turn(player)
