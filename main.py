@@ -1,6 +1,7 @@
 from tkinter import *
 from PIL import Image, ImageTk
 import time
+from player import Player
 
 
 
@@ -18,6 +19,7 @@ game_spaces = [
     (500, 700)
     ]
 buttons = []
+count = 1
 
 
 
@@ -48,18 +50,27 @@ O_img = ImageTk.PhotoImage(draw_O)
 canvas = Canvas(root, width=header.width(), height=(header.height() * 4))
 canvas.grid(row=0, column=0, sticky='nsew')
 
+p1 = Player(name='Player 1', avatar=draw_X)
+p2 = Player(name='Player 2', avatar=draw_O)
+
 
 
 
 
 
 def button_click(button):
+    global count
+    if count % 2 == 0:
+        current_player = p2
+    else:
+        current_player = p1
+    avi_img = current_player.avatar
     img_to_merge = Image.new('RGBA', cell_img.size)
     converted_cell = cell_img.convert('RGBA')
     img_to_merge.paste(converted_cell, (0, 0))
     x_loc = [b[1][0] for b in buttons if b[0] == button] #button[1][0]
     y_loc = [b[1][1] for b in buttons if b[0] == button] #button[1][1]
-    img_to_merge.paste(draw_X, (0, 0), draw_X)
+    img_to_merge.paste(avi_img, (0, 0), avi_img)
     display_img = ImageTk.PhotoImage(img_to_merge)
     display_lbl = Label(root, image=display_img, highlightthickness=0)
     display_lbl.image = display_img
@@ -67,6 +78,7 @@ def button_click(button):
     buttons_to_remove = next((b for b in buttons if b[0] == button), None)
     if buttons_to_remove is not None:
         buttons.remove(buttons_to_remove)
+    count += 1
 
 def generate_button(x, y):
     cell_button = Button(root, image=cell, highlightthickness=0, bd=0, command=lambda: button_click(button=cell_button))
