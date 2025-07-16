@@ -30,7 +30,6 @@ player_1.name = 'X'
 player_2.name = 'O'
 
 players = [player_1, player_2]
-current_player: Player
 
 
 
@@ -56,26 +55,23 @@ draw_X = Image.open('images/X.png')
 X_img = ImageTk.PhotoImage(draw_X)
 draw_O = Image.open('images/O.png')
 O_img = ImageTk.PhotoImage(draw_O)
+player_1.avatar = draw_X
+player_2.avatar = draw_O
 
 canvas = Canvas(root, width=header.width(), height=(header.height() * 4))
 canvas.grid(row=0, column=0, sticky='nsew')
 
 
-def find_current(func):
-    def wrapper(*args, **kwargs):
-        global current_player
-        result = func(*args, **kwargs)
-        current_player = current_player
-        return result
-    return wrapper
 
 
-@find_current
-def button_click(button, current_player):
-    if current_player == player_1:
-        tok = draw_X
-    elif current_player == player_2:
-        tok = draw_O
+def get_current():
+    global current_player
+    return current_player
+
+
+def button_click(button):
+    current_player = get_current()
+    tok = current_player.avatar
     img_to_merge = Image.new('RGBA', cell_img.size)
     converted_cell = cell_img.convert('RGBA')
     img_to_merge.paste(converted_cell, (0, 0))
@@ -97,8 +93,7 @@ def generate_button(x, y):
 def measure():
     return len(buttons)
 
-def take_turn(player):
-    current_player = player
+def take_turn():
     is_turn = True
     while is_turn:
         old = measure()
@@ -124,6 +119,3 @@ for tup in game_spaces:
 
 
 root.mainloop()
-while len(buttons) > 0:
-    for player in players:
-        take_turn(player)
