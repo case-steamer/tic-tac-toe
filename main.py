@@ -1,7 +1,6 @@
 from tkinter import *
 from PIL import Image, ImageTk
 import time
-from player import Player
 
 
 
@@ -20,16 +19,6 @@ game_spaces = [
     ]
 buttons = []
 
-
-
-class Player:
-    pass
-
-player_1 = Player()
-player_2 = Player()
-
-players = [player_1, player_2]
-current_player: Player
 
 
 
@@ -62,14 +51,9 @@ canvas.grid(row=0, column=0, sticky='nsew')
 
 
 
-def get_current():
-    global current_player
-    return current_player
 
 
 def button_click(button):
-    current_player = get_current()
-    tok = current_player.avatar
     img_to_merge = Image.new('RGBA', cell_img.size)
     converted_cell = cell_img.convert('RGBA')
     img_to_merge.paste(converted_cell, (0, 0))
@@ -91,16 +75,7 @@ def generate_button(x, y):
 def measure():
     return len(buttons)
 
-def take_turn(player):
-    global current_player
-    current_player = player
-    is_turn = True
-    while is_turn:
-        old = measure()
-        time.sleep(.5)
-        new = measure()
-        if old != new:
-            is_turn = False
+
 
 
 
@@ -119,6 +94,3 @@ for tup in game_spaces:
 
 
 root.mainloop()
-while len(buttons) > 0:
-    for player in players:
-        take_turn(player)
