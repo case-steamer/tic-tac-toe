@@ -1,3 +1,4 @@
+import tkinter
 from tkinter import *
 from PIL import Image, ImageTk
 import time
@@ -60,55 +61,91 @@ p1 = Player(name='Player 1', avatar=draw_X, status='')
 p2 = Player(name='Player 2', avatar=draw_O, status='')
 
 
-def check_for_three(player:Player, cell_x, cell_y):
-    print((cell_x, cell_y))
-    global xos
-    global xts
-    global xfs
-    global yts
-    global yfs
-    global yss
-    x_local = [num for num in range(100, 600, 200)]
-    y_local = [num for num in range(300, 800, 200)]
-    print(x_local)
-    print(y_local)
-    for num in x_local:
-        if cell_x == num and num == 100:
-            xos += 1
-            # break
-        elif cell_x == num and num == 300:
-            xts += 1
-            # break
-        elif cell_x == num and num == 500:
-            xfs += 1
-            # break
-    for y in y_local:
-        if cell_y ==  y and y == 300:
-            yts += 1
-            # break
-        elif cell_y == y and y == 500:
-            yfs += 1
-            # break
-        elif cell_y == y and y == 700:
-            yss += 1
-            # break
-    x_cell_score = [xos, xts, xfs]
-    y_cell_score = [yts, yfs, yss]
-    print(x_cell_score)
-    print(y_cell_score)
-    if sum(x_cell_score) == sum(y_cell_score) == 3:
-        player.status = 'wins'
-        marker = True
+
+def check_vertical(cell_list: list):
+    tick = None
+    one = 0
+    two = 0
+    three = 0
+    for cell in cell_list:
+        if cell[1] == 300:
+            one += 1
+        elif cell[1] == 500:
+            two += 1
+        elif cell[1] == 700:
+            three += 1
+    ticks = [one, two, three]
+    for t in ticks:
+        if t == 3:
+            tick = True
+            break
+    if not tick:
+        tick = False
+    return tick
+
+
+def check_horizontal(cell_list: list):
+    tick = None
+    one = 0
+    two = 0
+    three = 0
+    for cell in cell_list:
+        if cell[0] == 100:
+            one += 1
+        elif cell[0] == 300:
+            two += 1
+        elif cell[0] == 500:
+            three += 1
+    ticks = [one, two, three]
+    for t in ticks:
+        if t == 3:
+            tick = True
+            break
+    if not tick:
+        tick = False
+    return tick
+
+
+def check_diagonal(cell_list:list):
+    p_ticks = 0
+    n_ticks = 0
+    x_coords = [num for num in range(100, 600, 200)]
+    y_coords = [num for num in range(300, 800, 200)]
+    for cell in cell_list:
+        for num in range(3):
+            if cell[0] == x_coords[num] and cell[1] == y_coords[num]:
+                p_ticks += 1
+    if p_ticks != 3:
+        y_coords.reverse()
+        for cell in cell_list:
+            for num in range(3):
+                if cell[0] == x_coords[num] and cell[1] == y_coords[num]:
+                    n_ticks += 1
+                    return n_ticks
     else:
-        for x in x_cell_score:
-            for y in y_cell_score:
-                if x != 3 and y != 3:
-                    marker = False
-                else:
-                    player.status = 'wins!'
-                    marker = True
-    print(marker)
-    return marker
+        return p_ticks
+
+
+
+
+def check_for_three(player:Player):
+    tick = None
+    if check_vertical(player.cells):
+        player.status = "wins!"
+        tick = True
+    elif not check_vertical(player.cells):
+        if check_horizontal(player.cells):
+            player.status = "wins!"
+            tick = True
+        elif not check_horizontal(player.cells):
+            if check_diagonal(player.cells) == 3:
+                player.status = 'wins!'
+                tick = True
+    if not tick:
+        tick = False
+    return tick
+
+
 
 
 
@@ -133,8 +170,11 @@ def button_click(button):
     if button_to_remove is not None:
         current_player.cells.append(button_to_remove[1])
         buttons.remove(button_to_remove)
-    if check_for_three(current_player, x_loc, y_loc):
+    if check_for_three(current_player):
         print(current_player.name + ' ' + current_player.status)
+    if current_player.status == 'wins!':
+        for button in buttons:
+            button[0].config(state=tkinter.DISABLED)
     count += 1
 
 def generate_button(x, y):
