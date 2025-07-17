@@ -21,15 +21,6 @@ game_spaces = [
     ]
 buttons = []
 count = 1
-xos = 0
-xts = 0
-xfs = 0
-yts = 0
-yfs = 0
-yss = 0
-
-
-
 
 
 
@@ -181,10 +172,6 @@ def generate_button(x, y):
     cell_button = Button(root, image=cell, highlightthickness=0, bd=0, command=lambda: button_click(button=cell_button))
     canvas.create_window(x, y, window=cell_button, width=200, height=200, anchor='center')
     buttons.append((cell_button, (x, y)))
-
-
-def measure():
-    return len(buttons)
 
 
 
