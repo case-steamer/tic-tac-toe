@@ -53,6 +53,8 @@ p2 = Player(name='Player 2', avatar=draw_O, status='')
 
 
 
+
+
 def check_vertical(cell_list: list):
     tick = None
     one = 0
@@ -117,8 +119,6 @@ def check_diagonal(cell_list:list):
         return p_ticks
 
 
-
-
 def check_for_three(player:Player):
     tick = None
     if check_vertical(player.cells):
@@ -135,9 +135,6 @@ def check_for_three(player:Player):
     if not tick:
         tick = False
     return tick
-
-
-
 
 
 def button_click(button):
@@ -166,7 +163,11 @@ def button_click(button):
     if current_player.status == 'wins!':
         for button in buttons:
             button[0].config(state=tkinter.DISABLED)
+        current_player.score += 1
+        p1_lab.config(text=p1.update())
+        p2_lab.config(text=p2.update())
     count += 1
+
 
 def generate_button(x, y):
     cell_button = Button(root, image=cell, highlightthickness=0, bd=0, command=lambda: button_click(button=cell_button))
@@ -177,7 +178,15 @@ def generate_button(x, y):
 
 
 
+
+
+
 canvas.create_image(0,0, image=header, anchor='nw')
+p1_lab = Label(root, text=p1.update(), font=('lato', 14), bg='#169222')
+p2_lab = Label(root, text=p2.update(), font=('lato', 14), bg='#169222')
+
+canvas.create_window(60, 100, window=p1_lab)
+canvas.create_window(60, 180, window=p2_lab)
 
 
 for tup in game_spaces:
