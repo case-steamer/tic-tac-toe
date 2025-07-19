@@ -105,18 +105,22 @@ def check_diagonal(cell_list:list):
     x_coords = [num for num in range(100, 600, 200)]
     y_coords = [num for num in range(300, 800, 200)]
     for cell in cell_list:
-        for num in range(3):
-            if cell[0] == x_coords[num] and cell[1] == y_coords[num]:
+        for r in range(3):
+            if cell[0] == x_coords[r] and cell[1] == y_coords[r]:
                 p_ticks += 1
     if p_ticks != 3:
-        y_coords.reverse()
+        x_coords = list(reversed(x_coords))
         for cell in cell_list:
-            for num in range(3):
-                if cell[0] == x_coords[num] and cell[1] == y_coords[num]:
+            for r in range(3):
+                if cell[0] == x_coords[r] and cell[1] == y_coords[r]:
                     n_ticks += 1
-                    return n_ticks
-    else:
+                    print(n_ticks)
+    if n_ticks == 3:
+        return n_ticks
+    elif n_ticks != 3 and p_ticks == 3:
         return p_ticks
+    else:
+        return 0
 
 
 def check_for_three(player:Player):
