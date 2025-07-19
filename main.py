@@ -120,7 +120,7 @@ def check_diagonal(cell_list:list):
     elif n_ticks != 3 and p_ticks == 3:
         return p_ticks
     else:
-        return 0
+        return None
 
 
 def check_for_three(player:Player):
