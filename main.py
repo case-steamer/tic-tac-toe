@@ -167,9 +167,15 @@ def button_click(button):
     if current_player.status == 'wins!':
         for button in buttons:
             button[0].config(state=tkinter.DISABLED)
+        time.sleep(1)
         current_player.score += 1
         p1_lab.config(text=p1.update())
         p2_lab.config(text=p2.update())
+        time.sleep(2)
+        clear_grid_area(canvas, game_spaces)
+        generate_game()
+        count = 1
+        return
     count += 1
 
 
@@ -179,7 +185,21 @@ def generate_button(x, y):
     buttons.append((cell_button, (x, y)))
 
 
+def generate_game():
+    for tup in game_spaces:
+        for x, y in [tup]:
+            row = x
+            column = y
+        generate_button(x=row, y=column)
 
+
+def clear_grid_area(parent_widget, coord_list):
+    for child in parent_widget.winfo_children():
+        info = child.bbox('all')
+        for coord in coord_list:
+            if info[0] <= coord[0] <=info[2] and info[1] <= coord[1] <= info[3]:
+                print(info)
+                child.destroy()
 
 
 
@@ -193,11 +213,7 @@ canvas.create_window(60, 100, window=p1_lab)
 canvas.create_window(60, 180, window=p2_lab)
 
 
-for tup in game_spaces:
-    for x, y in [tup]:
-        row = x
-        column = y
-    generate_button(x=row, y=column)
+generate_game()
 
 
 
