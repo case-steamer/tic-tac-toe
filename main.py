@@ -172,7 +172,7 @@ def button_click(button):
         p1_lab.config(text=p1.update())
         p2_lab.config(text=p2.update())
         time.sleep(2)
-        clear_grid_area(canvas, game_spaces)
+        clear_grid(canvas.winfo_children())
         generate_game()
         count = 1
         return
@@ -193,13 +193,10 @@ def generate_game():
         generate_button(x=row, y=column)
 
 
-def clear_grid_area(parent_widget, coord_list):
-    for child in parent_widget.winfo_children():
-        info = child.bbox('all')
-        for coord in coord_list:
-            if info[0] <= coord[0] <=info[2] and info[1] <= coord[1] <= info[3]:
-                print(info)
-                child.destroy()
+def clear_grid(board):
+    for widget in board:
+        if type(widget) == Button:
+            widget.destroy()
 
 
 
