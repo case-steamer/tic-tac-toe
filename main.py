@@ -171,6 +171,9 @@ def button_click(button):
         current_player.score += 1
         p1_lab.config(text=p1.update())
         p2_lab.config(text=p2.update())
+        current_player.status = ''
+        p1.cells = []
+        p2.cells = []
         time.sleep(2)
         clear_grid(canvas.winfo_children())
         generate_game()
