@@ -3,6 +3,7 @@ from tkinter import *
 from PIL import Image, ImageTk
 import time
 from player import Player
+from cptr_player import Computer
 
 
 
