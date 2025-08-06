@@ -49,8 +49,14 @@ O_img = ImageTk.PhotoImage(draw_O)
 canvas = Canvas(root, width=header.width(), height=(header.height() * 4))
 canvas.grid(row=0, column=0, sticky='nsew')
 
+command = input('human or computer?: ')
+
 p1 = Player(name='Player 1', avatar=draw_X, status='')
-p2 = Player(name='Player 2', avatar=draw_O, status='')
+
+if command == 'computer':
+    p2 = Computer(name='Computer', avatar=draw_O, status='')
+else:
+    p2 = Player(name='Player 2', avatar=draw_O, status='')
 
 
 
@@ -148,6 +154,8 @@ def button_click(button):
         current_player = p2
     else:
         current_player = p1
+    if type(current_player) == Computer:
+        current_player.make_play(options=buttons)
     avi_img = current_player.avatar
     img_to_merge = Image.new('RGBA', cell_img.size)
     converted_cell = cell_img.convert('RGBA')
