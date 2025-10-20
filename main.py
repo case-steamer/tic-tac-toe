@@ -50,6 +50,7 @@ canvas = Canvas(root, width=header.width(), height=(header.height() * 4))
 canvas.grid(row=0, column=0, sticky='nsew')
 
 command = input('human or computer?: ')
+play_made = False
 
 p1 = Player(name='Player 1', avatar=draw_X, status='')
 
@@ -59,7 +60,8 @@ else:
     p2 = Player(name='Player 2', avatar=draw_O, status='')
 
 
-
+if p2:
+    players = [p1, p2]
 
 
 def check_vertical(cell_list: list):
@@ -150,12 +152,11 @@ def check_for_three(player:Player):
 
 def button_click(button):
     global count
+    global play_made
     if count % 2 == 0:
         current_player = p2
     else:
         current_player = p1
-    if type(current_player) == Computer:
-        current_player.make_play(options=buttons)
     avi_img = current_player.avatar
     img_to_merge = Image.new('RGBA', cell_img.size)
     converted_cell = cell_img.convert('RGBA')
@@ -189,6 +190,7 @@ def button_click(button):
         count = 1
         return
     count += 1
+    play_made = True
 
 
 def generate_button(x, y):
@@ -225,8 +227,18 @@ canvas.create_window(60, 180, window=p2_lab)
 generate_game()
 
 
+def play_game():
+    root.mainloop()
+    global play_made
+    while len(buttons) > 0:
+        play_made = False
+        for p in players:
+            if type(p) == Computer and play_made == False:
+                computer_clicked = p.make_play(buttons)
+                button_click(computer_clicked)
+            elif type(p) == Player and play_made == False:
+                while not play_made:
+                    pass
 
-
-
-
-root.mainloop()
+if __name__ == '__main__':
+    play_game()
