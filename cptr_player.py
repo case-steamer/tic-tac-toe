@@ -1,3 +1,5 @@
+import tkinter
+
 from player import Player
 import random
 
@@ -34,22 +36,23 @@ class Computer(Player):
             for x in xes:
                 print('tried x value')
                 if (o[1][0]/100) + x == [num for num in range(3, 8, 2)]:
-                    o[0].invoke()
+                    # o[0].invoke()
                     print('clicked x somewhere')
+                    clicked = o
                     need_random = 1
                     break
             for y in ys:
                 print('tried y value')
                 if (o[1][1]/100) + y == [num for num in range(3, 6, 2)]:
-                    o[0].invoke()
+                    # o[0].invoke()
                     print('clicked y somewhere')
                     clicked = o
                     need_random = 1
                     break
             if need_random == 0:
                 choice = random.choice(options)
-                choice[0].invoke()
+                # choice[0].invoke()
                 print('clicked random')
                 clicked = choice
                 break
-        # return clicked
+        return clicked

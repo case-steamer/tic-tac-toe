@@ -154,9 +154,7 @@ def button_click(button):
     global count
     global play_made
     if count % 2 == 0:
-        this = True
         current_player = p2
-        current_player.make_play(buttons)
     else:
         current_player = p1
     avi_img = current_player.avatar
@@ -192,6 +190,9 @@ def button_click(button):
         count = 1
         return
     count += 1
+    if p2 is Computer:
+        play:tuple = p2.make_play(buttons)
+        button_click(play[0])
     play_made = True
 
 
