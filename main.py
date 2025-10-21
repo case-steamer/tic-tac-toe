@@ -123,7 +123,7 @@ def check_diagonal(cell_list:list):
             for r in range(3):
                 if cell[0] == x_coords[r] and cell[1] == y_coords[r]:
                     n_ticks += 1
-                    # print(n_ticks)
+                    print(n_ticks)
     if n_ticks == 3:
         return n_ticks
     elif n_ticks != 3 and p_ticks == 3:
@@ -232,20 +232,16 @@ generate_game()
 
 def play_game():
     root.mainloop()
-    # global play_made
-    # while len(buttons) > 0:
-    #     play_made = False
-    #     for p in players:
-    #         if p is Computer and play_made == False:
-    #             print(type(p))
-    #             while not play_made:
-    #                 computer_clicked = p.make_play(buttons)
-    #                 computer_clicked[0].invoke()
-    #             # button_click(computer_clicked[0])
-    #         elif p is Player and play_made == False:
-    #             print(type(p))
-    #             while not play_made:
-    #                 pass
+    global play_made
+    while len(buttons) > 0:
+        play_made = False
+        for p in players:
+            if type(p) == Computer and play_made == False:
+                computer_clicked = p.make_play(buttons)
+                button_click(computer_clicked)
+            elif type(p) == Player and play_made == False:
+                while not play_made:
+                    pass
 
 if __name__ == '__main__':
     play_game()

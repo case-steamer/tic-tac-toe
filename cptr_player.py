@@ -40,7 +40,6 @@ class Computer(Player):
                     print('clicked x somewhere')
                     clicked = o
                     need_random = 1
-                    break
             for y in ys:
                 print('tried y value')
                 if (o[1][1]/100) + y == [num for num in range(3, 6, 2)]:
@@ -48,11 +47,13 @@ class Computer(Player):
                     print('clicked y somewhere')
                     clicked = o
                     need_random = 1
-                    break
             if need_random == 0:
                 choice = random.choice(options)
                 # choice[0].invoke()
                 print('clicked random')
                 clicked = choice
+<<<<<<< HEAD
                 break
+=======
+>>>>>>> parent of e0234f6 (lines 234-247 are useless, need to find some way to call a computer play from player's button_click)
         return clicked
