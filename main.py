@@ -50,7 +50,6 @@ canvas = Canvas(root, width=header.width(), height=(header.height() * 4))
 canvas.grid(row=0, column=0, sticky='nsew')
 
 command = input('human or computer?: ')
-play_made = False
 
 p1 = Player(name='Player 1', avatar=draw_X, status='')
 
@@ -60,8 +59,7 @@ else:
     p2 = Player(name='Player 2', avatar=draw_O, status='')
 
 
-if p2:
-    players = [p1, p2]
+players = [p1, p2]
 
 
 def check_vertical(cell_list: list):
@@ -157,9 +155,7 @@ def trigger_click(button):
 
 
 def button_click(button):
-    print(button)
     global turn_count
-    global play_made
     if turn_count % 2 == 0:
         current_player = p2
     else:
@@ -183,7 +179,6 @@ def button_click(button):
         print(current_player.name + ' ' + current_player.status)
     if current_player.status == '':
         turn_count += 1
-        play_made = True
     elif current_player.status == 'wins!':
         for button in buttons:
             button[0].config(state=tkinter.DISABLED)
@@ -191,6 +186,8 @@ def button_click(button):
         current_player.score += 1
         p1_lab.config(text=p1.update())
         p2_lab.config(text=p2.update())
+        p1.score = 0
+        p2.score = 0
         current_player.status = ''
         p1.cells = []
         p2.cells = []
@@ -198,7 +195,6 @@ def button_click(button):
         clear_grid(canvas.winfo_children())
         generate_game()
         turn_count = 1
-        return
 
 
 if type(p2) == Computer:
@@ -243,16 +239,6 @@ generate_game()
 
 def play_game():
     root.mainloop()
-    # global play_made
-    # while len(buttons) > 0:
-    #     play_made = False
-    #     for p in players:
-    #         if type(p) == Computer and play_made == False:
-    #             computer_clicked = p.make_play(buttons)
-    #             button_click(computer_clicked)
-    #         elif type(p) == Player and play_made == False:
-    #             while not play_made:
-    #                 pass
 
 if __name__ == '__main__':
     play_game()
