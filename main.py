@@ -152,10 +152,12 @@ def check_for_three(player:Player):
 
 def trigger_click(button):
     button_click(button)
-    button_click(p2.make_play(buttons))
+    button_to_click = p2.make_play(buttons)
+    button_click(button_to_click[0])
 
 
 def button_click(button):
+    print(button)
     global count
     global play_made
     if count % 2 == 0:

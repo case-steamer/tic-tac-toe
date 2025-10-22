@@ -42,7 +42,6 @@ class Computer(Player):
                 #     o[0].invoke()
                     print('clicked x somewhere')
                     clicked = o
-                    print(o)
                     need_random = 1
                     break
             if need_random == 1:
