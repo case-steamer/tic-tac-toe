@@ -123,7 +123,7 @@ def check_diagonal(cell_list:list):
             for r in range(3):
                 if cell[0] == x_coords[r] and cell[1] == y_coords[r]:
                     n_ticks += 1
-                    print(n_ticks)
+                    # print(n_ticks)
     if n_ticks == 3:
         return n_ticks
     elif n_ticks != 3 and p_ticks == 3:
@@ -148,6 +148,11 @@ def check_for_three(player:Player):
     if not tick:
         tick = False
     return tick
+
+
+def trigger_click(button):
+    button_click(button)
+    button_click(p2.make_play(buttons))
 
 
 def button_click(button):
@@ -190,14 +195,16 @@ def button_click(button):
         count = 1
         return
     count += 1
-    if p2 is Computer:
-        play:tuple = p2.make_play(buttons)
-        button_click(play[0])
     play_made = True
+
+if type(p2) == Computer:
+    on_click = trigger_click
+else:
+    on_click = button_click
 
 
 def generate_button(x, y):
-    cell_button = Button(root, image=cell, highlightthickness=0, bd=0, command=lambda: button_click(button=cell_button))
+    cell_button = Button(root, image=cell, highlightthickness=0, bd=0, command=lambda: on_click(button=cell_button))
     canvas.create_window(x, y, window=cell_button, width=200, height=200, anchor='center')
     buttons.append((cell_button, (x, y)))
 
@@ -232,16 +239,16 @@ generate_game()
 
 def play_game():
     root.mainloop()
-    global play_made
-    while len(buttons) > 0:
-        play_made = False
-        for p in players:
-            if type(p) == Computer and play_made == False:
-                computer_clicked = p.make_play(buttons)
-                button_click(computer_clicked)
-            elif type(p) == Player and play_made == False:
-                while not play_made:
-                    pass
+    # global play_made
+    # while len(buttons) > 0:
+    #     play_made = False
+    #     for p in players:
+    #         if type(p) == Computer and play_made == False:
+    #             computer_clicked = p.make_play(buttons)
+    #             button_click(computer_clicked)
+    #         elif type(p) == Player and play_made == False:
+    #             while not play_made:
+    #                 pass
 
 if __name__ == '__main__':
     play_game()
