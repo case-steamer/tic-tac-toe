@@ -21,7 +21,7 @@ game_spaces = [
     (500, 700)
     ]
 buttons = []
-count = 1
+turn_count = 1
 
 
 
@@ -158,9 +158,9 @@ def trigger_click(button):
 
 def button_click(button):
     print(button)
-    global count
+    global turn_count
     global play_made
-    if count % 2 == 0:
+    if turn_count % 2 == 0:
         current_player = p2
     else:
         current_player = p1
@@ -181,7 +181,10 @@ def button_click(button):
         buttons.remove(button_to_remove)
     if check_for_three(current_player):
         print(current_player.name + ' ' + current_player.status)
-    if current_player.status == 'wins!':
+    if current_player.status == '':
+        turn_count += 1
+        play_made = True
+    elif current_player.status == 'wins!':
         for button in buttons:
             button[0].config(state=tkinter.DISABLED)
         time.sleep(1)
@@ -194,10 +197,9 @@ def button_click(button):
         time.sleep(2)
         clear_grid(canvas.winfo_children())
         generate_game()
-        count = 1
+        turn_count = 1
         return
-    count += 1
-    play_made = True
+
 
 if type(p2) == Computer:
     on_click = trigger_click
