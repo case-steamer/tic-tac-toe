@@ -34,7 +34,7 @@ class Computer(Player):
         ys = [oy_ticks, ty_ticks, fy_ticks]
         for o in options:
             for x in xes:
-                if 3 - x >= 0:
+                if 3 - (x/100) >= 0:
                     clicked = o
                     need_random = 1
                     break
@@ -42,7 +42,7 @@ class Computer(Player):
                 break
             elif need_random == 0:
                 for y in ys:
-                    if 3 - y >= 0:
+                    if 3 - (y/100) >= 0:
                         clicked = o
                         need_random = 1
                         break

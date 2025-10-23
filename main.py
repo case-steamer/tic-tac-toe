@@ -1,4 +1,5 @@
 import tkinter
+from inspect import Traceback
 from tkinter import *
 from PIL import Image, ImageTk
 import time
@@ -121,7 +122,6 @@ def check_diagonal(cell_list:list):
             for r in range(3):
                 if cell[0] == x_coords[r] and cell[1] == y_coords[r]:
                     n_ticks += 1
-                    # print(n_ticks)
     if n_ticks == 3:
         return n_ticks
     elif n_ticks != 3 and p_ticks == 3:
@@ -151,7 +151,20 @@ def check_for_three(player:Player):
 def trigger_click(button):
     button_click(button)
     button_to_click = p2.make_play(buttons)
-    button_click(button_to_click[0])
+    if len(p1.cells) >= 1:
+        if not any(button_to_click[1] == p for p in p1.cells):
+            print(button_to_click[1])
+            button_click(button_to_click[0])
+            print([p for p in p1.cells])
+            print([p for p in p2.cells])
+            print([p[1] for p in buttons])
+            go = False
+        else:
+            button_to_click = p2.make_play(buttons)
+    else:
+        pass
+
+
 
 
 def button_click(button):
@@ -174,25 +187,24 @@ def button_click(button):
     button_to_remove = next((b for b in buttons if b[0] == button), None)
     if button_to_remove is not None:
         current_player.cells.append(button_to_remove[1])
+        button_to_remove[0].config(state=tkinter.DISABLED)
         buttons.remove(button_to_remove)
+        turn_count += 1
     if check_for_three(current_player):
         print(current_player.name + ' ' + current_player.status)
-    if current_player.status == '':
-        turn_count += 1
-    elif current_player.status == 'wins!':
+    if current_player.status == 'wins!':
         for button in buttons:
             button[0].config(state=tkinter.DISABLED)
         time.sleep(1)
         current_player.score += 1
         p1_lab.config(text=p1.update())
         p2_lab.config(text=p2.update())
-        p1.score = 0
-        p2.score = 0
         current_player.status = ''
-        p1.cells = []
-        p2.cells = []
+        p1.cells.clear()
+        p2.cells.clear()
         time.sleep(2)
         clear_grid(canvas.winfo_children())
+        buttons.clear()
         generate_game()
         turn_count = 1
 
